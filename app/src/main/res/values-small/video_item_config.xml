@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="initialFetch">2</integer>
+    <dimen name="video_card_height">200sp</dimen>
+    <dimen name="handleTextSize">22sp</dimen>
+    <dimen name="titleTextSize">18sp</dimen>
+    <dimen name="descriptionTextSize">18sp</dimen>
+    <dimen name="home_screen_radius">35sp</dimen>
+</resources>

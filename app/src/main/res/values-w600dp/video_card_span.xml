@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="video_card_span">6</integer>
+    <dimen name="video_card_width">145sp</dimen>
+</resources>
