@@ -84,16 +84,11 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
                 GridLayoutManager(context, resources.getInteger(R.integer.video_card_span))
             adapter = itemAdapter
         }
-        var firstCall = true
         binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
-                if (!recyclerView.canScrollVertically(1) && newState == RecyclerView.SCROLL_STATE_IDLE && firstCall) {
+                if (!recyclerView.canScrollVertically(1) && newState == RecyclerView.SCROLL_STATE_IDLE) {
                     modelFetch(videoListModel)
-                    firstCall=false
-                }
-                if(newState == RecyclerView.SCROLL_STATE_DRAGGING){
-                    firstCall=false
                 }
             }
         })
