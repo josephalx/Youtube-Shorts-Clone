@@ -52,10 +52,10 @@ When you add code which uses reflection add rules to `proguard-rules.pro`.
 
 ## Screenshots
 <div align="center">
-    <img src="/Screenshots/Screenshot_20230603_192749.png" width="200px" style="margin-right: 30px;"/> 
+     <img src="/Screenshots/Screenshot_20230603_193054.png" width="200px"/> 
+    <img src="/Screenshots/Screenshot_20230603_192749.png" width="200px" /> 
     <img src="/Screenshots/Screenshot_20230603_192844.png" width="200px"/> 
-    <img src="/Screenshots/Screenshot_20230603_192749.png" width="200px"/> 
-    <img src="/Screenshots/Screenshot_20230603_192749.png" width="200px"/> 
+    <img src="/Screenshots/Screenshot_20230603_192903.png" width="200px"/> 
 </div>
 
 
