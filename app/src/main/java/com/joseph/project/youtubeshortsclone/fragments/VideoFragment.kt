@@ -7,12 +7,11 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.media3.exoplayer.ExoPlayer
-import androidx.media3.exoplayer.trackselection.DefaultTrackSelector
 import androidx.viewpager2.widget.ViewPager2
 import com.joseph.project.youtubeshortsclone.R
 import com.joseph.project.youtubeshortsclone.databinding.VideoFragmentBinding
@@ -63,6 +62,11 @@ class VideoFragment : Fragment(R.layout.video_fragment) {
                 videoList.addAll(it)
                 videoAdapter.notifyItemRangeChanged(0, it.size)
                 binding.videoScrollProgressBar.visibility = ProgressBar.GONE
+            }
+        }
+        videoListViewModel.getNetworkError().observe(viewLifecycleOwner){
+            if(it){
+                Toast.makeText(requireContext(),"Network error try after some time", Toast.LENGTH_LONG).show()
             }
         }
 

@@ -1,6 +1,7 @@
 package com.joseph.project.youtubeshortsclone.viewmodels
 
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.joseph.project.youtubeshortsclone.model.Post
@@ -12,6 +13,7 @@ class VideoListViewModel : ViewModel() {
     private var pageNumber = 0
     private var videoItemList: MutableLiveData<ArrayList<Post>> = MutableLiveData()
     private var videoItem = ArrayList<Post>()
+    private var networkError:MutableLiveData<Boolean> = MutableLiveData(false)
     private var position = 0
 
     init {
@@ -21,6 +23,7 @@ class VideoListViewModel : ViewModel() {
     fun getVideoList(): MutableLiveData<ArrayList<Post>> {
         return videoItemList
     }
+    fun getNetworkError(): MutableLiveData<Boolean> = networkError
 
     fun updateVideoList(position: Int, clickedPost: Post) {
         this.position = position
@@ -39,6 +42,7 @@ class VideoListViewModel : ViewModel() {
             for (i in 1..numberOfPages) {
                 Log.d("YT Shorts", "Initial Fetch Called")
                 try {
+                    networkError.value=false
                     val response = RetrofitObject.api.getVideos(pageNumber++)
                     if (response.isSuccessful && response.body() != null) {
                         response.body()?.let {
@@ -51,9 +55,11 @@ class VideoListViewModel : ViewModel() {
                     }
                 } catch (e: IOException) {
                     Log.d("YT Shorts", "IO Exception: " + e.message + "\n" + e.toString())
+                    networkError.postValue(true)
                     break
                 } catch (e: HttpException) {
                     Log.d("YT Shorts", "HTTP Exception: " + e.message + "\n" + e.toString())
+                    networkError.postValue(true)
                     break
                 }
             }
@@ -65,6 +71,7 @@ class VideoListViewModel : ViewModel() {
     suspend fun fetchVideo() {
         try {
             Log.d("YT Shorts", "Fetch Called")
+            networkError.value=false
             val response = RetrofitObject.api.getVideos(pageNumber++)
             if (response.isSuccessful && response.body() != null) {
                 response.body()?.let {
@@ -75,8 +82,10 @@ class VideoListViewModel : ViewModel() {
             }
         } catch (e: IOException) {
             Log.d("YT Shorts", "IO Exception: " + e.message + "\n" + e.toString())
+            networkError.postValue(true)
         } catch (e: HttpException) {
             Log.d("YT Shorts", "HTTP Exception: " + e.message + "\n" + e.toString())
+            networkError.postValue(true)
         }
     }
 }

@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -71,18 +72,28 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
             itemAdapter.notifyItemRangeChanged(0, it.size)
             binding.progressBar.visibility = ProgressBar.GONE
         }
+        videoListModel.getNetworkError().observe(viewLifecycleOwner){
+            if(it){
+                binding.progressBar.visibility=ProgressBar.GONE
+                Toast.makeText(requireContext(),"Network error try after some time",Toast.LENGTH_LONG).show()
+            }
+        }
 
         binding.recyclerView.apply {
             layoutManager =
                 GridLayoutManager(context, resources.getInteger(R.integer.video_card_span))
             adapter = itemAdapter
         }
-
+        var firstCall = true
         binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
-                if (!recyclerView.canScrollVertically(1)) {
+                if (!recyclerView.canScrollVertically(1) && newState == RecyclerView.SCROLL_STATE_IDLE && firstCall) {
                     modelFetch(videoListModel)
+                    firstCall=false
+                }
+                if(newState == RecyclerView.SCROLL_STATE_DRAGGING){
+                    firstCall=false
                 }
             }
         })
@@ -93,6 +104,7 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
         binding.progressBar.visibility = ProgressBar.VISIBLE
         Log.d("YT Shorts", "model fetch")
         lifecycleScope.launchWhenCreated {
+            Log.d("YT Shorts","Scope Called")
             videoListViewModel.fetchVideo()
         }
     }
