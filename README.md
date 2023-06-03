@@ -10,7 +10,8 @@ This is sample application in native android using Kotkin inspired from YouTube 
 1. [Setup. Install IDE](#setup)
 1. [Build. Create apk](#building)
 1. [ProGuard](#proguard)
-1. [Credits](#credits)
+2. [Screenshots](#screenshots)
+3. [Credits](#credits)
 
 ## Setup
 ### Starting from base project
@@ -48,6 +49,11 @@ Project already has proguard config for included libraries.
 Maintain [proguard-rules.pro](https://github.com/josephalx/Youtube-Shorts-Clone/blob/main/app/proguard-rules.pro) updated when you add new libraries or play with reflection.
 When you add new library or check out its Proguard section and add rules to `proguard-rules.pro`.
 When you add code which uses reflection add rules to `proguard-rules.pro`.
+
+## Screenshots
+<div align="center">
+    <img src="/Screenshots/Screenshot_20230603_192749.png" width="400px"</img> 
+</div>
 
 ## Credits
 This YouTube Shorts Clone app is maintianed by [Joseph Alex Chakola](https://github.com/josephalx). The open API from [Gro.care](https://gro.care/) was used to obtain videos for this app.
