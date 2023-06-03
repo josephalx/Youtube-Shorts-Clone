@@ -48,3 +48,6 @@ Project already has proguard config for included libraries.
 Maintain [proguard-rules.pro](https://github.com/josephalx/Youtube-Shorts-Clone/blob/main/app/proguard-rules.pro) updated when you add new libraries or play with reflection.
 When you add new library or check out its Proguard section and add rules to `proguard-rules.pro`.
 When you add code which uses reflection add rules to `proguard-rules.pro`.
+
+## Credits
+This YouTube Shorts Clone app is maintianed by [Joseph Alex Chakola](https://github.com/josephalx). The open API from [Gro.care](https://gro.care/) was used to obtain videos for this app.
