@@ -5,6 +5,7 @@ This is sample application in native android using Kotkin inspired from YouTube 
 * Retrofit was used to get data from the backend URL.
 * ViewModel was created to share the data between the fragments.
 * Exoplayer 3 was used to play video in a continous fashion.
+* SimpleCache is used to cache previously played videos to enable seemless playback
 
 ## Table of Contents
 1. [Setup. Install IDE](#setup)
