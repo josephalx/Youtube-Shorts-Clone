@@ -1,7 +1,6 @@
 package com.joseph.project.youtubeshortsclone.viewmodels
 
 import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.joseph.project.youtubeshortsclone.model.Post
@@ -56,10 +55,12 @@ class VideoListViewModel : ViewModel() {
                 } catch (e: IOException) {
                     Log.d("YT Shorts", "IO Exception: " + e.message + "\n" + e.toString())
                     networkError.postValue(true)
+                    pageNumber--
                     break
                 } catch (e: HttpException) {
                     Log.d("YT Shorts", "HTTP Exception: " + e.message + "\n" + e.toString())
                     networkError.postValue(true)
+                    pageNumber--
                     break
                 }
             }
@@ -75,7 +76,7 @@ class VideoListViewModel : ViewModel() {
             val response = RetrofitObject.api.getVideos(pageNumber++)
             if (response.isSuccessful && response.body() != null) {
                 response.body()?.let {
-                    videoItem = videoItemList.value!!
+                    videoItem = videoItemList.value?: arrayListOf()
                     videoItem.addAll(it.data.posts)
                     videoItemList.value = videoItem
                 }
@@ -83,9 +84,11 @@ class VideoListViewModel : ViewModel() {
         } catch (e: IOException) {
             Log.d("YT Shorts", "IO Exception: " + e.message + "\n" + e.toString())
             networkError.postValue(true)
+            pageNumber--
         } catch (e: HttpException) {
             Log.d("YT Shorts", "HTTP Exception: " + e.message + "\n" + e.toString())
             networkError.postValue(true)
+            pageNumber--
         }
     }
 }

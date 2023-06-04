@@ -24,6 +24,7 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
     private var fragmentBinding: HomeFragmentBinding? = null
     private val binding get() = fragmentBinding!!
     private var videoList = ArrayList<Post>()
+    private lateinit var videoListModel: VideoListViewModel
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -41,17 +42,10 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
         (activity as AppCompatActivity).setSupportActionBar(binding.toolbar)
 
         val videoFragment = VideoFragment()
-        val videoListModel = ViewModelProvider(requireActivity())[VideoListViewModel::class.java]
+        videoListModel = ViewModelProvider(requireActivity())[VideoListViewModel::class.java]
 
         Log.d("YT Shorts", "Called onCreate")
 
-//        binding.switchFragment.setOnClickListener {
-//            activity?.supportFragmentManager!!.beginTransaction().apply {
-//                replace(R.id.flFragment, videoFragment)
-//                addToBackStack("videoFragment")
-//                commit()
-//            }
-//        }
 
         val itemAdapter = VideoListAdapter(videoList)
         itemAdapter.setClickListener(object : VideoListAdapter.OnClickListener {
@@ -72,10 +66,14 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
             itemAdapter.notifyItemRangeChanged(0, it.size)
             binding.progressBar.visibility = ProgressBar.GONE
         }
-        videoListModel.getNetworkError().observe(viewLifecycleOwner){
-            if(it){
-                binding.progressBar.visibility=ProgressBar.GONE
-                Toast.makeText(requireContext(),"Network error try after some time",Toast.LENGTH_LONG).show()
+        videoListModel.getNetworkError().observe(viewLifecycleOwner) {
+            if (it) {
+                binding.progressBar.visibility = ProgressBar.GONE
+                Toast.makeText(
+                    requireContext(),
+                    "Network error try after some time",
+                    Toast.LENGTH_LONG
+                ).show()
             }
         }
 
@@ -88,29 +86,33 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
                 if (!recyclerView.canScrollVertically(1) && newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    modelFetch(videoListModel)
+                    modelFetch()
                 }
             }
         })
-        initFetch(videoListModel, resources.getInteger(R.integer.initialFetch))
+        initFetch(resources.getInteger(R.integer.initialFetch))
     }
 
-    private fun modelFetch(videoListViewModel: VideoListViewModel) {
+    private fun modelFetch() {
         binding.progressBar.visibility = ProgressBar.VISIBLE
         Log.d("YT Shorts", "model fetch")
         lifecycleScope.launchWhenCreated {
-            Log.d("YT Shorts","Scope Called")
-            videoListViewModel.fetchVideo()
+            Log.d("YT Shorts", "Scope Called")
+            videoListModel.fetchVideo()
         }
     }
 
-    private fun initFetch(videoListViewModel: VideoListViewModel, pageNumber: Int) {
+    private fun initFetch(pageNumber: Int) {
         binding.progressBar.visibility = ProgressBar.VISIBLE
         lifecycleScope.launchWhenCreated {
-            videoListViewModel.initialFetch(pageNumber)
+            videoListModel.initialFetch(pageNumber)
         }
     }
 
+    override fun onPause() {
+        super.onPause()
+        videoListModel.getVideoList().removeObservers(viewLifecycleOwner)
+    }
 
     override fun onDestroy() {
         super.onDestroy()

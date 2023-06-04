@@ -49,13 +49,13 @@ class VideoFragment : Fragment(R.layout.video_fragment) {
         (activity as AppCompatActivity).requestedOrientation =
             ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 
-        val videoAdapter = VideoScrollerAdapter(videoList,requireContext())
+        val videoAdapter = VideoScrollerAdapter(videoList, requireContext())
 
         videoListViewModel = ViewModelProvider(requireActivity())[VideoListViewModel::class.java]
         videoListViewModel.getVideoList().observe(viewLifecycleOwner) {
             Log.d(ytTag, "Item: " + it[0].toString())
-            if (it.size == videoList.size){
-                binding.videoScroller.currentItem=1
+            if (it.size == videoList.size) {
+                binding.videoScroller.currentItem = 1
                 binding.videoScrollProgressBar.visibility = ProgressBar.GONE
             } else {
                 videoList.clear()
@@ -64,9 +64,15 @@ class VideoFragment : Fragment(R.layout.video_fragment) {
                 binding.videoScrollProgressBar.visibility = ProgressBar.GONE
             }
         }
-        videoListViewModel.getNetworkError().observe(viewLifecycleOwner){
-            if(it){
-                Toast.makeText(requireContext(),"Network error try after some time", Toast.LENGTH_LONG).show()
+
+        videoListViewModel.getNetworkError().observe(viewLifecycleOwner) {
+            if (it) {
+                Toast.makeText(
+                    requireContext(),
+                    "Network error try after some time",
+                    Toast.LENGTH_LONG
+                ).show()
+                binding.videoScrollProgressBar.visibility = ProgressBar.GONE
             }
         }
 
@@ -77,8 +83,8 @@ class VideoFragment : Fragment(R.layout.video_fragment) {
             ViewPager2.OnPageChangeCallback() {
             override fun onPageScrollStateChanged(state: Int) {
                 super.onPageScrollStateChanged(state)
-                if(state == ViewPager2.SCROLL_STATE_IDLE || state == ViewPager2.SCROLL_STATE_DRAGGING){
-                    if (binding.videoScroller.currentItem==(videoList.size-1)){
+                if (state == ViewPager2.SCROLL_STATE_IDLE || state == ViewPager2.SCROLL_STATE_DRAGGING) {
+                    if (binding.videoScroller.currentItem == (videoList.size - 1)) {
                         fetchVideo()
                     }
                 }
@@ -98,6 +104,8 @@ class VideoFragment : Fragment(R.layout.video_fragment) {
         super.onPause()
         Log.d(ytTag, "On Pause Called")
         videoListViewModel.resetList()
+        videoListViewModel.getNetworkError().removeObservers(viewLifecycleOwner)
+        videoListViewModel.getVideoList().removeObservers(viewLifecycleOwner)
         (activity as AppCompatActivity).requestedOrientation =
             ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR
     }
@@ -111,9 +119,9 @@ class VideoFragment : Fragment(R.layout.video_fragment) {
             activity?.window?.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
         }
         (activity as AppCompatActivity).supportActionBar?.show()
-        val cache = File(requireActivity().cacheDir,"media")
-        if (cache.delete()){
-            Log.d("YT Shorts","Cache Deleted")
+        val cache = File(requireActivity().cacheDir, "media")
+        if (cache.delete()) {
+            Log.d("YT Shorts", "Cache Deleted")
         }
 
         binding.videoScroller.adapter = null

@@ -93,7 +93,10 @@ class VideoScrollerAdapter(private val vList: ArrayList<Post>, private val conte
         super.onViewAttachedToWindow(holder)
         holder.videoFrame.player?.apply {
             seekTo(0)
-            play()
+            playWhenReady = true
+            if (this.playerError != null) {
+                prepare()
+            }
         }
     }
 
@@ -104,10 +107,17 @@ class VideoScrollerAdapter(private val vList: ArrayList<Post>, private val conte
         simpleCache.release()
     }
 
+    override fun onViewRecycled(holder: VideoScrollViewHolder) {
+        super.onViewRecycled(holder)
+        Log.d("YT Shorts", "View recycled")
+        holder.videoFrame.player?.release()
+    }
+
     override fun onViewDetachedFromWindow(holder: VideoScrollViewHolder) {
         super.onViewDetachedFromWindow(holder)
         holder.videoFrame.player?.pause()
     }
+
 
     override fun getItemCount(): Int = vList.size
 

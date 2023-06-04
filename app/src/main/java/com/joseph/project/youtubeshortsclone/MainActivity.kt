@@ -1,8 +1,7 @@
 package com.joseph.project.youtubeshortsclone
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import com.joseph.project.youtubeshortsclone.databinding.ActivityMainBinding
 import com.joseph.project.youtubeshortsclone.fragments.HomeFragment
 
